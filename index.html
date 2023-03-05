@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant App</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Smythe&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --mint: #16DB99;
+            --modal-placeholder: #757575;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Smythe", sans-serif;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        header {
+            width: 100%;
+            height: 167px;
+            background: url(./ferks-guare-KEZdWfYD-ow-unsplash\ 1.png);
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            gap: .5rem;
+            color: #fff;
+            padding: 2rem;
+        }
+
+        header h1 {
+            font-weight: 500;
+        }
+
+        header p {
+            font-size: 1.5rem;
+            font-weight: lighter;
+        }
+
+        main {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+        }
+
+        .order {
+            position: relative;
+            display: flex;
+            width: 100%;
+            padding: 2rem;
+            background: #fff;
+        }
+
+        .order-separate {
+            width: calc(100% - 4rem);
+            border-bottom: 1px solid #D2D2D2;
+        }
+
+        .order-left {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .order-icon {
+            font-size: 3rem;
+        }
+
+        .order-right {
+            margin-left: 2rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .order-name {
+            text-transform: capitalize;
+            font-weight: 500;
+            font-size: 1.7rem;
+            letter-spacing: .1rem;
+        }
+
+
+
+        .order-ingreds {
+            color: #8B8B8B;
+            margin-bottom: .5rem;
+        }
+
+        .order-price {
+            font-size: 1.5rem;
+            font-weight: normal;
+        }
+
+        .add-btn {
+            position: absolute;
+            font-family: "Inter";
+            font-weight: 200;
+            font-size: 2.5rem;
+            right: 1rem;
+            top: 35%;
+            transform: translateY(-40%);
+            height: 3rem;
+            width: 3rem;
+            display: grid;
+            place-content: center;
+            text-align: center;
+            border-radius: 50%;
+            border: 1px solid #DEDEDE;
+            cursor: pointer;
+        }
+
+        .recipent {
+            display: none;
+            padding: 2rem;
+            width: 100%;
+            /* background-color: rebeccapurple; */
+        }
+
+        .recipent h1 {
+            font-weight: normal;
+            font-size: 2rem;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .recipent-separate {
+            border: 1px solid #222;
+        }
+
+        .ordered-items {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            list-style: none;
+        }
+
+        .ordered-pizza {
+            order: 1;
+        }
+
+        .ordered-hamburger {
+            order: 2;
+        }
+
+        .ordered-juice {
+            order: 3;
+        }
+
+        .ordered-item {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .ordered-item-name {
+            font-size: 1.5rem;
+            letter-spacing: .1rem;
+            font-weight: 600;
+        }
+
+        .remove-order-btn {
+            font-family: Inter;
+            font-size: .8rem;
+            margin-left: 1rem;
+            color: #BBBBBB;
+            cursor: pointer;
+        }
+
+        .ordered-item-price {
+            margin-left: auto;
+            font-size: 1.5rem;
+        }
+
+        .total-price {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .total-price-title {
+            font-weight: 600;
+            letter-spacing: .1rem;
+            font-size: 1.5rem;
+        }
+
+        .total-price-value {
+            margin-left: auto;
+            font-size: 1.5rem;
+        }
+
+        #complete-order {
+            outline: 0;
+            border: 0;
+            color: #fff;
+            font-family: Inter, sans-serif;
+            font-weight: 600;
+            background-color: var(--mint);
+            font-size: 1.125rem;
+            padding: 1rem 0;
+            width: 100%;
+            border-radius: .25rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 2.5rem 0;
+        }
+
+
+        #complete-order:active {
+            background: #12b17c;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: 150px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 5.186544418334961px 5.186544418334961px 255.43731689453125px 0px #00000080;
+
+        }
+
+        .modal-title {
+            font-family: Inter, sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin: 2rem;
+        }
+
+        .modal-input {
+            outline: 0;
+            border: 1px solid var(--mint);
+            font-size: 1.125rem;
+            padding: 0.5rem 0.8rem;
+            margin-bottom: 1rem;
+            width: calc(100% - 2rem);
+            border-radius: .25rem;
+        }
+
+        .modal-input:active,
+        .modal-input:focus {
+            border: 1px solid #222;
+        }
+
+        #pay-btn {
+            outline: 0;
+            border: 0;
+            color: #fff;
+            font-family: Inter, sans-serif;
+            font-weight: 600;
+            background-color: var(--mint);
+            font-size: 1.125rem;
+            padding: 1rem 0;
+            width: calc(100% - 2rem);
+            border-radius: .25rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 1rem;
+        }
+
+
+        #pay-btn:active {
+            background: #12b17c;
+        }
+
+        .ended {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: #ECFDF5;
+            padding: 2rem;
+            height: 200px;
+
+        }
+
+        .end-order {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 1.5rem;
+            color: #065F46;
+            background: #ECFDF5;
+            letter-spacing: .125rem;
+
+        }
+
+        .username {
+            text-transform: capitalize;
+        }
+    </style>
+
+    <script type="module">
+        import orders from "./data.js"
+        const main = document.getElementById("main")
+
+
+
+        let ordersHtml = ""
+        for (let order of orders) {
+            ordersHtml += `
+            <div class="order" data-order="${order.name}">
+                <div class="order-left">
+                    <span class="order-icon">${order.icon}</span>    
+                </div>
+                <div class="order-right">
+                    <h3 class="order-name">${order.name}</h3>    
+                    <p class="order-ingreds">${order.ingreds}</p>
+                    <h4 class="order-price">$${order.price}</h4>
+                    <div class="add-btn" data-add-order=${order.id}>+</div>
+                </div>
+            </div>
+            <hr class="order-separate">
+        `
+        }
+
+        ordersHtml !== "" ? main.innerHTML = ordersHtml : ""
+
+
+        const addPizza = document.querySelectorAll(".add-btn")[0]
+        const addHamburger = document.querySelectorAll(".add-btn")[1]
+        const addJuice = document.querySelectorAll(".add-btn")[2]
+        const recipent = document.getElementById("recipent")
+        const orderedItems = document.querySelector(".ordered-items")
+        const orderedPizza = document.querySelectorAll(".ordered-item")[0]
+        const orderedHamburger = document.querySelectorAll(".ordered-item")[1]
+        const orderedJuice = document.querySelectorAll(".ordered-item")[2]
+        const totalPriceValueDisplay = document.querySelector(".total-price-value")
+        const removeOrderBtns = document.querySelectorAll(".remove-order-btn")
+        const completeOrder = document.getElementById("complete-order")
+        let totalPrice = 0, totalPizzaPrice = 0, totalHamburgerPrice = 0, totalJuicePrice = 0;
+        let pizzaPrice = orders[0].price
+        let hamburgerPrice = orders[1].price
+        let juicePrice = orders[2].price
+        let pizzaOrdered = false
+        let hamburgerOrdered = false
+        let juiceOrdered = false
+        let pizzaOrderCount = 0, hamburgerOrderCount = 0, juiceOrderCount = 0;
+
+        orderedItems.innerHTML = ""
+
+
+        addPizza.addEventListener("click", e => {
+            pizzaOrdered = true
+            pizzaOrderCount += 1
+            recipent.style.display = "block"
+            orderedItems.appendChild(orderedPizza)
+            orderedPizza.style.display = "flex"
+            if (pizzaOrdered) {
+                console.log("pizza ordered")
+                totalPrice += pizzaPrice
+                if (pizzaOrderCount > 0) {
+                    console.log("pizza order count is:", pizzaOrderCount)
+                    orderedPizza.children[0].innerHTML = `Pizza <span class="order-counts"> X ${pizzaOrderCount}</span>`
+                }
+
+            }
+
+            console.log("total price:", totalPrice)
+            totalPriceValueDisplay.textContent = totalPrice
+        })
+
+
+        addHamburger.addEventListener("click", e => {
+            hamburgerOrdered = true
+            hamburgerOrderCount += 1
+            recipent.style.display = "block"
+            orderedItems.appendChild(orderedHamburger)
+            orderedHamburger.style.display = "flex"
+
+            if (hamburgerOrdered) {
+                console.log("hamburger ordered")
+                totalPrice += hamburgerPrice
+                if (hamburgerOrderCount > 0) {
+                    console.log("hamburger order count is:", hamburgerOrderCount)
+                    orderedHamburger.children[0].innerHTML = `Hamburger <span class="order-counts"> X ${hamburgerOrderCount}</span>`
+                }
+            }
+            console.log("total price:", totalPrice)
+            totalPriceValueDisplay.textContent = totalPrice
+        })
+
+
+        addJuice.addEventListener("click", e => {
+            juiceOrdered = true
+            juiceOrderCount += 1
+            recipent.style.display = "block"
+            orderedItems.appendChild(orderedJuice)
+            orderedJuice.style.display = "flex"
+
+            if (juiceOrdered) {
+                console.log("juice ordered")
+                totalPrice += juicePrice
+                if (juiceOrderCount > 0) {
+                    console.log("juice order count is:", juiceOrderCount)
+                    orderedJuice.children[0].innerHTML = `Juice <span class="order-counts"> X ${juiceOrderCount}</span>`
+                }
+            }
+
+            console.log("total price:", totalPrice)
+            totalPriceValueDisplay.textContent = totalPrice
+
+        })
+
+
+
+        removeOrderBtns[0].addEventListener("click", e => {
+            pizzaOrderCount -= 1
+            totalPrice -= pizzaPrice
+            console.log(orderedItems.childElementCount)
+            if (orderedItems.childElementCount === 0 || totalPrice === 0) {
+                orderedPizza.style.display = "none"
+                orderedItems.removeChild(orderedPizza)
+                recipent.style.display = "none"
+                console.log("ordered items is zero")
+            } else {
+                if (pizzaOrderCount >= 0) {
+                    orderedPizza.children[0].innerHTML = `Pizza <span class="order-counts"> X ${pizzaOrderCount}</span>`
+                }
+                if (pizzaOrderCount === 0) {
+                    orderedPizza.style.display = "none"
+                    orderedItems.removeChild(orderedPizza)
+                    console.log("pizza is zero ya ali")
+                }
+                recipent.style.display = "block"
+                console.log("not zero yet!")
+            }
+
+            console.log("total price:", totalPrice)
+            totalPriceValueDisplay.textContent = totalPrice
+
+
+        })
+
+
+        removeOrderBtns[1].addEventListener("click", e => {
+            hamburgerOrderCount -= 1
+            totalPrice -= hamburgerPrice
+
+
+            console.log(orderedItems.childElementCount)
+            if (orderedItems.childElementCount === 0 || totalPrice === 0) {
+                orderedHamburger.style.display = "none"
+                orderedItems.removeChild(orderedHamburger)
+                recipent.style.display = "none"
+                console.log("ordered items is zero")
+            } else {
+                if (hamburgerOrderCount >= 0) {
+                    orderedHamburger.children[0].innerHTML = `Hamburger <span class="order-counts"> X ${hamburgerOrderCount}</span>`
+                }
+                if (hamburgerOrderCount === 0) {
+                    orderedHamburger.style.display = "none"
+                    orderedItems.removeChild(orderedHamburger)
+                    console.log("hamburder is zero ya ali")
+                }
+                recipent.style.display = "block"
+                console.log("not zero yet!")
+            }
+
+            console.log("total price:", totalPrice)
+            totalPriceValueDisplay.textContent = totalPrice
+
+        })
+
+
+        removeOrderBtns[2].addEventListener("click", e => {
+            juiceOrderCount -= 1
+            totalPrice -= juicePrice
+
+            console.log(orderedItems.childElementCount)
+            if (orderedItems.childElementCount === 0 || totalPrice === 0) {
+                orderedJuice.style.display = "none"
+                orderedItems.removeChild(orderedJuice)
+                recipent.style.display = "none"
+                console.log("ordered items is zero")
+            } else {
+                if (juiceOrderCount >= 0) {
+                    orderedJuice.children[0].innerHTML = `Juice <span class="order-counts"> X ${juiceOrderCount}</span>`
+                } if (juiceOrderCount === 0) {
+                    orderedJuice.style.display = "none"
+                    orderedItems.removeChild(orderedJuice)
+                    console.log("juice is zero ya ali")
+                }
+                recipent.style.display = "block"
+                console.log("not zero yet!")
+            }
+
+            console.log("total price:", totalPrice)
+            totalPriceValueDisplay.textContent = totalPrice
+
+        })
+
+        totalPriceValueDisplay.textContent = totalPrice
+
+        const modal = document.createElement("div")
+        modal.innerHTML = `
+                <h4 class="modal-title">Enter card details</h4>
+                <input type="text" class="modal-input" placeholder="Enter your name">
+                <input type="text" class="modal-input" placeholder="Enter card number">
+                <input type="text" class="modal-input" placeholder="Enter CVV">
+                <button id="pay-btn">Pay</button>
+            `;
+        modal.classList.add("modal")
+
+        document.querySelector(".container").children[0].style.filter = "grayscale(0)"
+        document.querySelector(".container").children[1].style.filter = "grayscale(0)"
+        document.querySelector(".container").children[2].style.filter = "grayscale(0)"
+
+
+        completeOrder.addEventListener("click", e => {
+            console.log("modal appended")
+            document.querySelector(".container").appendChild(modal)
+            document.querySelector(".container").children[0].style.filter = "grayscale(100%)"
+            document.querySelector(".container").children[1].style.filter = "grayscale(100%)"
+            document.querySelector(".container").children[2].style.filter = "grayscale(100%)"
+
+            document.querySelector("#pay-btn").addEventListener("click", e => {
+                modal.style.display = "none"
+                document.querySelector(".container").removeChild(modal)
+                document.querySelector(".container").children[0].style.filter = "grayscale(0%)"
+                document.querySelector(".container").children[1].style.filter = "grayscale(0%)"
+                document.querySelector(".container").children[2].style.filter = "grayscale(0%)"
+
+                recipent.style.display = "flex"
+                recipent.classList.add("ended")
+                recipent.innerHTML = `<div class="end-order">
+                                        Thanks, <span class="username">${cardDetails.username}!</span> Your order is on its way!
+                                    </div>`
+            })
+        })
+
+
+        const cardDetails = {
+            username: undefined,
+            cardNumber: undefined,
+            cvv: undefined
+        }
+
+        if (document.querySelector(".container").hasChildNodes(modal)) {
+            console.log("modal is here")
+            modal.querySelectorAll(".modal-input").forEach(input => {
+                input.addEventListener("input", e => {
+                    cardDetails.username = e.target.parentElement.children[1].value
+                    cardDetails.cardNumber = Number(e.target.parentElement.children[2].value)
+                    cardDetails.cvv = Number(e.target.parentElement.children[3].value)
+                    // username = input[0].value
+                    // cardDetails = input[1].value
+                    // cvv = input[2].value
+
+                    console.log(cardDetails)
+
+                    // const { username, cardNumber, cvv } = cardDetails
+                    // console.log(username, cardNumber, cvv)
+                })
+            })
+        } else {
+            console.log("not modal")
+        }
+
+
+    </script>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Jimmy's Dinner</h1>
+            <p>The best burgers and pizzas in town</p>
+        </header>
+        <main id="main">
+
+        </main>
+        <div class="recipent" id="recipent">
+            <h1>Your order</h1>
+            <ul class="ordered-items" id="ordered-items">
+                <li class="ordered-item ordered-pizza">
+                    <h4 class="ordered-item-name">Pizza</h4>
+                    <span class="remove-order-btn">remove</span>
+                    <p class="ordered-item-price">$14</p>
+                </li>
+                <li class="ordered-item ordered-hamburger">
+                    <h4 class="ordered-item-name">Hamburger</h4>
+                    <span class="remove-order-btn">remove</span>
+                    <p class="ordered-item-price">$12</p>
+                </li>
+
+                <li class="ordered-item ordered-juice">
+                    <h4 class="ordered-item-name">Juice</h4>
+                    <span class="remove-order-btn">remove</span>
+                    <p class="ordered-item-price">$12</p>
+                </li>
+            </ul>
+            <hr class="recipent-separate">
+            <div class="total-price">
+                <h4 class="total-price-title">Total Price:</h4>
+                <p class="total-price-value"></p>
+            </div>
+            <button id="complete-order">Complete order</button>
+        </div>
+
+    </div>
+    </div>
+</body>
+
+</html>
